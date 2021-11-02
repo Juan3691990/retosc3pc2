@@ -1,6 +1,8 @@
 
 package Retos.Retos;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,25 @@ public class RepositorioReservaciones {
     
     public void delete(Reservaciones reservaciones){
         crud4.delete(reservaciones);
+    }
+    
+    public List <Reservaciones> ReservacionStatusRepositorio (String Status){
+        return crud4.findAllByStatus(Status);
+    }
+
+     
+    public List<Reservaciones> ReservacionTiempoRepositorio (Date a, Date b){
+        return crud4.findAllByStartDateAfterAndStartDateBefore(a, b);
+    
+    }
+    
+    public List<ContadorClientes> getClientesRepositorio(){
+        List<ContadorClientes> res = new ArrayList<>();
+        List<Object[]> report = crud4.countTotalReservationsByClient();
+        for(int i=0; i<report.size(); i++){
+            res.add(new ContadorClientes((Long)report.get(i)[1],(Cliente) report.get(i)[0]));
+        }
+        return res;
     }
     
 }
